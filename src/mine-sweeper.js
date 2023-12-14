@@ -23,9 +23,37 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function isValidIndex(matrix, i, j) {
+  return matrix[i] !== undefined && matrix[i][j] !== undefined;
+}
+function minesweeper(matrix) {
+  const matrixRes = [];
+  for (let i = 0; i < matrix.length; i++) {
+    let countMine = 0;
+    matrixRes[i] = [];
+    for (let j = 0; j < matrix[i].length; j++) {
+      
+        if (isValidIndex(matrix, i, j - 1) && matrix[i][j - 1] === true) countMine++;
+      
+        if (isValidIndex(matrix, i, j + 1) && matrix[i][j + 1] === true) countMine++;
+      
+        if (isValidIndex(matrix, i + 1, j - 1) && matrix[i + 1][j - 1] === true) countMine++;
+        
+        if (isValidIndex(matrix, i + 1, j + 1) && matrix[i + 1][j + 1] === true) countMine++;
+        
+        if (isValidIndex(matrix, i + 1, j) && matrix[i + 1][j] === true) countMine++;
+      
+        if (isValidIndex(matrix, i - 1, j - 1) && matrix[i - 1][j - 1] === true) countMine++;
+        
+        if (isValidIndex(matrix, i - 1, j + 1) && matrix[i - 1][j + 1] === true) countMine++;
+        
+        if (isValidIndex(matrix, i - 1, j) && matrix[i - 1][j] === true) countMine++;
+      
+      matrixRes[i][j] = countMine;
+      countMine = 0
+    }
+  }
+  return matrixRes;
 }
 
 module.exports = {
