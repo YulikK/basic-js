@@ -23,7 +23,9 @@ class VigenereCipheringMachine {
   constructor (direct) {
     this._en = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     this._square = [];
-    this._isDirect = direct;
+    this._genSquareEncrypt();
+    this._isDirect = true;
+    if (direct !== undefined) this._isDirect = direct;
   }
 
   _genSquareEncrypt() {
@@ -35,33 +37,59 @@ class VigenereCipheringMachine {
   _completeLength(key, length) {
     let index = 0;
     while (key.length < length) {
-      key += key.slice(index, 1);
+      const addChar = key.slice(index, index + 1);
+      key += addChar;
       index++;
     }
     return key;
   }
+  _addCase(code, text) {
+    let positionCase = 0;
+    while (text.indexOf(' ', positionCase) > 0) {
+      const codeArray = code.split('');
+      codeArray.splice(text.indexOf(' ', positionCase), 0, ' ');
+      code = codeArray.join('');
+      positionCase = text.indexOf(' ', positionCase) + 1;
+    }
+    return code;
+  }
+
   encrypt(text, key) {
     if( text && key) {
-      text = text.toUpperCase();
-      key = this._completeLength(key.toUpperCase(), text.length - 1);
-      this._genSquareEncrypt();
+      const textCode = text.toUpperCase().split(' ').join('');
+      key = this._completeLength(key.toUpperCase(), textCode.length);
       let code = '';
-      for (var i = 0; i < text.length; i++) {
-        code += this.square[this._en.indexOf(text[i])][this._en.indexOf(key[i])];
+      let keyIndex = 0;
+      for (var i = 0; i < textCode.length; i++) {
+        if (this._en.indexOf(textCode[i]) === -1) {
+          code += textCode[i];
+        } else {
+          code += this._square[this._en.indexOf(textCode[i])][this._en.indexOf(key[keyIndex])];
+          keyIndex++;
+        }
       }
+      code = this._addCase(code, text);
       return this._isDirect ? code : code.split('').reverse().join('');
     } else throw new TypeError('Incorrect arguments!');
   }
   decrypt(text, key) {
-    if( text && key) {
-      this._genSquareEncrypt();
+    if( text && key){
       let code = '';
-      for (let i = 0; i < text.length; i++) {
-          const row = this._en.indexOf(key[i]);
-          const coll = this.square[row].indexOf(text[i]);
+      const textCode = text.toUpperCase().split(' ').join('');
+      key = this._completeLength(key.toUpperCase(), textCode.length);
+      let keyIndex = 0;
+      for (let i = 0; i < textCode.length; i++) {
+        if(this._en.indexOf(textCode[i]) === -1) {
+          code += textCode[i];
+        } else {
+          const row = this._en.indexOf(key[keyIndex]);
+          const coll = this._square[row].indexOf(textCode[i]);
           code += this._en[coll];
+          keyIndex ++;
+        }
       }
-      return this._isDirect ? code : code.split('').reverse().join('');
+      code = this._addCase(code, text);
+      return this._isDirect ? code : code.slice().split('').reverse().join('') ;
     } else throw new TypeError('Incorrect arguments!');
   }
 }
