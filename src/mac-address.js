@@ -16,7 +16,7 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 function isMAC48Address(n) {
   const nArr = n.split('-');
-  const regexp = /^[\da-f]+$/i; 
+  const regexp = /^[\da-f]/i; 
   let isMac = true;
   nArr.map((element) => {
     if (!regexp.test(element)) isMac = false;

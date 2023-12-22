@@ -8,7 +8,7 @@
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
           "--inspect-brk",
-          "${workspaceFolder}/test/vigenere-cipher.test.js"
+          "${workspaceFolder}/test/what-season.test.js"
       ],
       "internalConsoleOptions": "openOnSessionStart"
     },

@@ -15,7 +15,7 @@ const { NotImplementedError } = require('../extensions/index.js');
 function getSumOfDigits(n) {
   while (n >= 10) {
     let arrN = [...n.toString()].map(Number);
-    n = arrN.reduce((sum, x) => sum + x, 0)
+    n = arrN.reduce((sum, currentValue) => sum + currentValue, 0)
   }
   return n;
 }
